@@ -1,0 +1,114 @@
+<html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข้อมูลการเรียน</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <link rel="stylesheet" href="./css/major.css">
+<body>
+  <div id="app">
+    <h2>ข้อมูลการเรียน</h2>
+
+    <div>
+      <input v-model="newCourse.code" placeholder="รหัสวิชา">
+      <input v-model="newCourse.name" placeholder="ชื่อวิชา">
+      <input v-model="newCourse.credit" placeholder="หน่วยกิต">
+      <input v-model="newCourse.grade" placeholder="เกรด">
+      <button @click="isEditing ? updateCourse() : addCourse()">
+        {{ isEditing ? 'บันทึก' : 'เพิ่ม' }}
+      </button>
+      <button v-if="isEditing" @click="cancelEdit">ยกเลิก</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>รหัสวิชา</th>
+          <th>ชื่อวิชา</th>
+          <th>หน่วยกิต</th>
+          <th>เกรด</th>
+          <th>การจัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(course, index) in courses" :key="index">
+          <td>{{ course.code }}</td>
+          <td>{{ course.name }}</td>
+          <td>{{ course.credit }}</td>
+          <td>{{ course.grade }}</td>
+          <td>
+            <button @click="editCourse(index)">แก้ไข</button>
+            <button @click="deleteCourse(index)">ลบ</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const { createApp, reactive, ref } = Vue;
+
+    createApp({
+      setup() {
+        const courses = ref([
+          { code: '01418214', name: 'Practicum in Software Development', credit: 1, grade: 'A' }
+        ]);
+
+        const newCourse = reactive({ code: '', name: '', credit: '', grade: '' });
+        const isEditing = ref(false);
+        const editIndex = ref(null);
+
+        const addCourse = () => {
+          if (newCourse.code && newCourse.name) {
+            courses.value.push({ ...newCourse });
+            clearForm();
+          }
+        };
+
+        const deleteCourse = (index) => {
+          courses.value.splice(index, 1);
+          cancelEdit();
+        };
+
+        const editCourse = (index) => {
+          Object.assign(newCourse, courses.value[index]);
+          editIndex.value = index;
+          isEditing.value = true;
+        };
+
+        const updateCourse = () => {
+          if (editIndex.value !== null) {
+            courses.value[editIndex.value] = { ...newCourse };
+            cancelEdit();
+          }
+        };
+
+        const cancelEdit = () => {
+          clearForm();
+          isEditing.value = false;
+          editIndex.value = null;
+        };
+
+        const clearForm = () => {
+          newCourse.code = '';
+          newCourse.name = '';
+          newCourse.credit = '';
+          newCourse.grade = '';
+        };
+
+        return {
+          courses,
+          newCourse,
+          isEditing,
+          addCourse,
+          editCourse,
+          updateCourse,
+          deleteCourse,
+          cancelEdit
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

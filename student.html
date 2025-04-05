@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข้อมูลนิสิต (Vue)</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <link rel="stylesheet" href="./css/sts.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    input {
+      display: block;
+      margin: 10px 0;
+      padding: 5px;
+      width: 300px;
+    }
+    img {
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="logo">
+      <div class="main-logo">
+        <h1>ข้อมูลนิสิต</h1>
+      </div>
+    </div>
+
+    <div class="imge">
+      <img src="./Camera Roll/image.jpg" width="200" height="200" alt="รูปนิสิต">
+    </div>
+
+    <div class="nisit">
+      <h3>ชื่อ-นามสกุลนิสิต / รหัสนิสิต</h3>
+      <div class="main-nisit">
+        <p>{{ fullName }}</p>
+        <p>nisit code : {{ nisitCode }}</p>
+      </div>
+      <input v-model="fullName" placeholder="กรอกชื่อ-นามสกุล">
+      <input v-model="nisitCode" placeholder="กรอกรหัสนิสิต">
+    </div>
+
+    <div class="school">
+      <h3>ชื่อโรงเรียน</h3>
+      <div class="name-school">
+        <p>{{ schoolName }}</p>
+      </div>
+      <input v-model="schoolName" placeholder="กรอกชื่อโรงเรียน">
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue;
+
+    createApp({
+      setup() {
+        const fullName = ref("ณัฐพงษ์ หล่อเหลี่ยม");
+        const nisitCode = ref("6630250109");
+        const schoolName = ref("สมุทรสาครวิทยาลัย");
+
+        return {
+          fullName,
+          nisitCode,
+          schoolName
+        };
+      }
+    }).mount("#app");
+  </script>
+</body>
+</html>
